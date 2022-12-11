@@ -37,13 +37,17 @@ def decode(a, b):
 def decode_ultra(a, b):
     switch = {
         "A": "rock",
-        "X": "rock",
         "B": "paper",
-        "Y": "paper",
         "C": "scissors",
-        "Z": "scissors",
+        "X": "lose",
+        "Y": "draw",
+        "Z": "win",
+        "lose": {"A": "C", "B": "A", "C": "B"},
+        "draw": {"A": "A", "B": "B", "C": "C"},
+        "win": {"A": "B", "B": "C", "C": "A"},
     }
-    return switch[a], switch[b]
+    my_move = switch[switch[b]][a]
+    return switch[a], switch[my_move]
 
 
 def increment_score(rps):
@@ -51,19 +55,16 @@ def increment_score(rps):
     a, b = rps
     if a == b:
         score += 3
-
     if b == "rock":
         if a == "scissors":
             score += 7
         else:
             score += 1
-
     elif b == "paper":
         if a == "rock":
             score += 8
         else:
             score += 2
-
     else:
         if a == "paper":
             score += 9
@@ -77,7 +78,7 @@ if __name__ == "__main__":
 
     with open("input.txt") as f:
         for line in f.readlines():
-            increment_score(decode(line[0], line[-2]))
+            increment_score(decode_ultra(line[0], line[-2]))
     print(score)
 
     stop = time.perf_counter()
